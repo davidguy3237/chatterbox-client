@@ -26,10 +26,26 @@ var App = {
   fetch: function(callback = ()=>{}) {
     Parse.readAll((data) => {
       // examine the response from the server request:
-      console.log(data);
+      console.log('data object', data);
+
+      for (let i = 0; i < Object.keys(data).length; i++) {
+        let message = data[i];
+        if (message.text.includes('</script>')) {
+          continue;
+        }
+        Messages._data[i] = message; // store the message object inside the Messages database/model
+        let room = message.roomname;
+        if (!Rooms._data[room]) {
+          Rooms._data[room] = true;
+        }
+      }
+
+      MessagesView.render();
+      RoomsView.render();
 
       // TODO: Use the data to update Messages and Rooms
       // and re-render the corresponding views.
+      callback();
     });
   },
 
@@ -42,4 +58,5 @@ var App = {
     App.$spinner.fadeOut('fast');
     FormView.setStatus(false);
   }
+
 };
