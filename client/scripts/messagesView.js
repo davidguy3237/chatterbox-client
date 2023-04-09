@@ -8,12 +8,22 @@ var MessagesView = {
   initialize: function() {
     // TODO: Perform any work which needs to be done
     // when this view loads.
-    console.log('THIS IS THE MESSAGES VIEW INITIALIZATION');
+    // console.log('THIS IS THE MESSAGES VIEW INITIALIZATION');
+    // if ( roomsView.currentRoom === 'test' ) {
+    //   this.render();
+    // } else {
+    //   this.render(roomsView.currentRoom);
+    // }
+    // $('body').on('click', () => console.log('hello'));
+    // $('body').on('click', () => {
+    //   console.log(event.target.value);
+    // });
   },
 
   render: function(roomname) {
     // TODO: Render _all_ the messages.
     this.$chats.html('');
+
     if (!roomname) {
       for (const key in Messages._data) {
         let messageObj = Messages._data[key];
@@ -21,15 +31,18 @@ var MessagesView = {
         this.$chats.append(message);
       }
     } else if (roomname) {
-      console.log('testing messagesView render', roomname);
+      // this.$chats.empty();
       for (const key in Messages._data) {
         let messageObj = Messages._data[key];
         if (messageObj.roomname === roomname) {
-          let message = this.renderMessage(messageObj);
-          this.$chats.append(message);
+          this.renderMessage(messageObj);
         }
       }
     }
+
+    $('.username').on('click', () => {
+      Friends.toggleStatus(event.target.innerText);
+    });
   },
 
   renderMessage: function(message) {
@@ -47,16 +60,15 @@ var MessagesView = {
 
     let messageRenderer = _.template(
       '<div class="message-box">' +
-        '<div class="username">' +
-          '<h2><%- username %></h2>' +
+        '<div class="username-section">' +
+          '<h2 class="username"><%- username %></h2>' +
         '</div>' +
         '<p class="text">' +
           '<%- text %>' +
         '</p>' +
       '</div>'
     );
-
-    return messageRenderer(message);
+    this.$chats.append(messageRenderer(message));
   },
 
   handleClick: function(event) {

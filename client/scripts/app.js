@@ -30,13 +30,15 @@ var App = {
 
       for (let i = 0; i < Object.keys(data).length; i++) {
         let message = data[i];
-        if (message.text.includes('</script>')) {
-          continue;
-        }
-        Messages._data[i] = message; // store the message object inside the Messages database/model
-        let room = message.roomname;
-        if (!Rooms._data[room]) {
-          Rooms._data[room] = true;
+        if (message.text) {
+          if (message.text.includes('</script>')) {
+            continue;
+          }
+          Messages._data[i] = message; // store the message object inside the Messages database/model
+          let room = message.roomname;
+          if (!Rooms._data[room]) {
+            Rooms._data[room] = true;
+          }
         }
       }
 
